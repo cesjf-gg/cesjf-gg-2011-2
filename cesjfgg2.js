@@ -8,7 +8,7 @@ var y = 0;
 var agora = Date.now();
 var depois = agora;
 var intervalo = 0;
-
+var moveBaixo = false;
 
 
 setInterval(passo,50);
@@ -21,8 +21,10 @@ setInterval(passo,50);
 function passo(){
    agora = Date.now();
    intervalo = agora - depois;
-   console.log(intervalo);
-   y=y+30*intervalo/1000;
+   //console.log(intervalo);
+   if(moveBaixo){
+      y=y+60*intervalo/1000;
+   }
    if(y>=250){
       y=250;
 }
