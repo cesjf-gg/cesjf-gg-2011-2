@@ -13,10 +13,24 @@ var moveBaixo = false;
 
 setInterval(passo,50);
 
+addEventListener("keydown", botaoPressionado);
+addEventListener("keyup", botaoSolto);
 
 
 
+function botaoPressionado(e){
+   console.log("botao pressionado: " + e.keyCode);
+   if (e.keyCode === 40) {
+      moveBaixo = true;
+   }
+}
 
+function botaoSolto(e){
+   console.log("botao solto: " + e.keyCode);
+   if (e.keyCode === 40) {
+      moveBaixo = false;
+   }
+}
 
 function passo(){
    agora = Date.now();
