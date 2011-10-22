@@ -4,8 +4,8 @@ var ctx = tela.getContext("2d");
 ctx.fillRect(0, 0, 400, 300);
 
 
-var y = 0;
-var x = 0;
+var y = 10;
+var x = 10;
 var agora = Date.now();
 var depois = agora;
 var intervalo = 0;
@@ -71,9 +71,22 @@ function passo(){
    if (moveEsquerda) {
      x=x-60*intervalo/1000;      
    }
-   if(y>=250){
-      y=250;
-}
+   if(y>=280){
+      y=280;
+
+   }
+
+   if(y<=0){
+      y=0;
+   }
+   if (x<=0) {
+     x =0;
+   }
+   if (x>=380) {
+     x=380;
+   } 
+   
+
    ctx.fillStyle="rgb(0,0,0)";
    ctx.fillRect(0, 0, 400, 300);
    
@@ -83,7 +96,7 @@ function passo(){
    ctx.lineWidth=2;
 
    ctx.beginPath( );
-   ctx.rect(10+x,10+y,20,20);
+   ctx.rect(x,y,20,20);
    ctx.closePath( );
    ctx.fill();
    ctx.stroke();
