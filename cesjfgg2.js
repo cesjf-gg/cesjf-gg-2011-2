@@ -6,6 +6,8 @@ ctx.fillRect(0, 0, 400, 300);
 
 var y = 10;
 var x = 10;
+var a = 20;
+var l = 20;
 var agora = Date.now();
 var depois = agora;
 var intervalo = 0;
@@ -13,7 +15,7 @@ var moveBaixo = false;
 var moveCima = false;
 var moveDireita = false;
 var moveEsquerda = false;
-
+var px=370, pa=35, py=270, pl=25;
 
 setInterval(passo,50);
 
@@ -23,7 +25,7 @@ addEventListener("keyup", botaoSolto);
 
 
 function botaoPressionado(e){
-   console.log("botao pressionado: " + e.keyCode);
+   //console.log("botao pressionado: " + e.keyCode);
    if (e.keyCode === 40) {
       moveBaixo = true;
    } else if (e.keyCode === 38) {
@@ -38,7 +40,7 @@ function botaoPressionado(e){
 }
 
 function botaoSolto(e){
-   console.log("botao solto: " + e.keyCode);
+   //console.log("botao solto: " + e.keyCode);
    if (e.keyCode === 40) {
       moveBaixo = false;
    } else if (e.keyCode === 38) {
@@ -95,12 +97,41 @@ function passo(){
    ctx.strokeStyle="rgb(255,255,255)"; 
    ctx.lineWidth=2;
 
+   //personagel do jogo
    ctx.beginPath( );
-   ctx.rect(x,y,20,20);
+   ctx.rect(x-l/2,y-a/2,l,a);
    ctx.closePath( );
    ctx.fill();
    ctx.stroke();
+
+//Desenha porta
+   ctx.fillStyle="rgb(155,100,50)";
+   ctx.strokeStyle="rgb(205,150,100)";
+   ctx.beginPath( );
+   ctx.rect(px-pl/2,py-pa/2,pl,pa);
+   ctx.closePath( );
+   ctx.fill();
+   ctx.stroke();
+   
+   console.log(colisao(x,y,a,l,px,py,pa,pl));
    depois = agora;
 }
 
 
+function colisao(x1, y1, a1, l1, x2, y2, a2, l2){
+   
+   if(y1+a1/2 < y2-a2/2)
+   {
+      return false;
+   }
+   if(y1-a1/2 > y2+a2/2) {
+      return false;
+   }
+   if(x1+l1/2 < x2-l2/2) {
+      return false;
+   }
+   if(x1-l1/2 > x2+l2/2) {
+      return false;
+   }
+   return true;
+}
