@@ -8,6 +8,11 @@ var porta = {
   
    x: 370, a:35, y:270, l:25  
 };
+var inimigo = {
+  
+   x: 370, a:25, y:170, l:25  
+};
+
 
 
 jogador.y = 10;
@@ -96,16 +101,42 @@ function passo(){
      jogador.x=380;
    } 
    
+   if (jogador.x < inimigo.x) {
+      inimigo.x=inimigo.x-10*nivel*intervalo/1000;   
+   }
+
+   if (jogador.y < inimigo.y) {
+      inimigo.y=inimigo.y-10*nivel*intervalo/1000;   
+   }
+   
+   if (jogador.x > inimigo.x) {
+      inimigo.x=inimigo.x+10*nivel*intervalo/1000;   
+   }
+
+   if (jogador.y > inimigo.y) {
+      inimigo.y=inimigo.y+10*nivel*intervalo/1000;   
+   }
 
    ctx.fillStyle="rgb(0,0,0)";
    ctx.fillRect(0, 0, 400, 300);
    
 
+
+ 
+   //inimigo
+   ctx.fillStyle="rgb(0,0,255)";
+   ctx.strokeStyle="rgb(255,255,255)"; 
+   ctx.lineWidth=2;
+   ctx.beginPath( );
+   ctx.rect(inimigo.x-inimigo.l/2,inimigo.y-inimigo.a/2,inimigo.l,inimigo.a);
+   ctx.closePath( );
+   ctx.fill();
+   ctx.stroke();
+
+   //personagel do jogo
    ctx.fillStyle="rgb(255,0,0)";
    ctx.strokeStyle="rgb(255,255,255)"; 
    ctx.lineWidth=2;
-
-   //personagel do jogo
    ctx.beginPath( );
    ctx.rect(jogador.x-jogador.l/2,jogador.y-jogador.a/2,jogador.l,jogador.a);
    ctx.closePath( );
@@ -121,6 +152,8 @@ function passo(){
    ctx.fill();
    ctx.stroke();
    
+
+
    console.log(colisao(jogador, porta));
 
    if(colisao(jogador, porta)){
