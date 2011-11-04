@@ -3,11 +3,17 @@ var ctx = tela.getContext("2d");
 
 ctx.fillRect(0, 0, 400, 300);
 
+var jogador = {};
+var porta = {
+  
+   x: 370, a:35, y:270, l:25  
+};
 
-var y = 10;
-var x = 10;
-var a = 20;
-var l = 20;
+
+jogador.y = 10;
+jogador.x = 10;
+jogador.a = 20;
+jogador.l = 20;
 var agora = Date.now();
 var depois = agora;
 var intervalo = 0;
@@ -15,7 +21,7 @@ var moveBaixo = false;
 var moveCima = false;
 var moveDireita = false;
 var moveEsquerda = false;
-var px=370, pa=35, py=270, pl=25;
+
 
 setInterval(passo,50);
 
@@ -59,33 +65,33 @@ function passo(){
    intervalo = agora - depois;
    //console.log(intervalo);
    if(moveBaixo){
-      y=y+60*intervalo/1000;
+      jogador.y=jogador.y+60*intervalo/1000;
    }
    
    if (moveCima) {
-      y=y-60*intervalo/1000; 
+      jogador.y=jogador.y-60*intervalo/1000; 
    }
    
    if (moveDireita) {
-      x=x+60*intervalo/1000;         
+      jogador.x=jogador.x+60*intervalo/1000;         
    }
 
    if (moveEsquerda) {
-     x=x-60*intervalo/1000;      
+     jogador.x=jogador.x-60*intervalo/1000;      
    }
-   if(y>=280){
-      y=280;
+   if(jogador.y>=280){
+      jogador.y=280;
 
    }
 
-   if(y<=0){
-      y=0;
+   if(jogador.y<=0){
+      jogador.y=0;
    }
-   if (x<=0) {
-     x =0;
+   if (jogador.x<=0) {
+     jogador.x =0;
    }
-   if (x>=380) {
-     x=380;
+   if (jogador.x>=380) {
+     jogador.x=380;
    } 
    
 
@@ -99,7 +105,7 @@ function passo(){
 
    //personagel do jogo
    ctx.beginPath( );
-   ctx.rect(x-l/2,y-a/2,l,a);
+   ctx.rect(jogador.x-jogador.l/2,jogador.y-jogador.a/2,jogador.l,jogador.a);
    ctx.closePath( );
    ctx.fill();
    ctx.stroke();
@@ -108,12 +114,12 @@ function passo(){
    ctx.fillStyle="rgb(155,100,50)";
    ctx.strokeStyle="rgb(205,150,100)";
    ctx.beginPath( );
-   ctx.rect(px-pl/2,py-pa/2,pl,pa);
+   ctx.rect(porta.x-porta.l/2,porta.y-porta.a/2,porta.l,porta.a);
    ctx.closePath( );
    ctx.fill();
    ctx.stroke();
    
-   console.log(colisao(x,y,a,l,px,py,pa,pl));
+   console.log(colisao(jogador.x,jogador.y,jogador.a,jogador.l,porta.x,porta.y,porta.a,porta.l));
    depois = agora;
 }
 
