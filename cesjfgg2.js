@@ -21,6 +21,8 @@ var moveBaixo = false;
 var moveCima = false;
 var moveDireita = false;
 var moveEsquerda = false;
+var nivel = 1;
+
 
 
 setInterval(passo,50);
@@ -120,6 +122,21 @@ function passo(){
    ctx.stroke();
    
    console.log(colisao(jogador, porta));
+
+   if(colisao(jogador, porta)){
+
+      nivel+=1;
+      jogador.x = jogador.l/2;
+      jogador.y = jogador.a/2;
+
+
+   }
+   ctx.fillStyle="rgb(255,255,0)";
+   ctx.strokeStyle="rgb(255,255,255)";
+   ctx.lineWidth = 1.0;
+   ctx.fillText("Nível: "+nivel,350,15);
+   ctx.strokeText("Nível: "+nivel,350,15);
+
    depois = agora;
 }
 
