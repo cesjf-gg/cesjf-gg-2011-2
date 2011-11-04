@@ -119,24 +119,24 @@ function passo(){
    ctx.fill();
    ctx.stroke();
    
-   console.log(colisao(jogador.x,jogador.y,jogador.a,jogador.l,porta.x,porta.y,porta.a,porta.l));
+   console.log(colisao(jogador, porta));
    depois = agora;
 }
 
 
-function colisao(x1, y1, a1, l1, x2, y2, a2, l2){
+function colisao(sprite1, sprite2){
    
-   if(y1+a1/2 < y2-a2/2)
+   if(sprite1.y+sprite1.a/2 < sprite2.y-sprite2.a/2)
    {
       return false;
    }
-   if(y1-a1/2 > y2+a2/2) {
+   if(sprite1.y-sprite1.a/2 > sprite2.y+sprite2.a/2) {
       return false;
    }
-   if(x1+l1/2 < x2-l2/2) {
+   if(sprite1.x+sprite1.l/2 < sprite2.x-sprite2.l/2) {
       return false;
    }
-   if(x1-l1/2 > x2+l2/2) {
+   if(sprite1.x-sprite1.l/2 > sprite2.x+sprite2.l/2) {
       return false;
    }
    return true;
