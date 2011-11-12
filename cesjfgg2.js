@@ -17,8 +17,10 @@ var inimigo = {
 
 jogador.y = 10;
 jogador.x = 10;
-jogador.a = 20;
-jogador.l = 20;
+jogador.a = 48;
+jogador.l = 35;
+jogador.quadro = 0;
+jogador.direcao = 0;
 var agora = Date.now();
 var depois = agora;
 var intervalo = 0;
@@ -28,7 +30,8 @@ var moveDireita = false;
 var moveEsquerda = false;
 var nivel = 1;
 
-
+var personagemImagem = new Image();
+personagemImagem.src = "personagem.png";
 
 setInterval(passo,50);
 
@@ -41,14 +44,18 @@ function botaoPressionado(e){
    //console.log("botao pressionado: " + e.keyCode);
    if (e.keyCode === 40) {
       moveBaixo = true;
+      jogador.direcao = 2;
    } else if (e.keyCode === 38) {
       moveCima = true;
+      jogador.direcao = 0;
    } 
    
    if (e.keyCode === 39) {
       moveDireita = true;
+      jogador.direcao = 1;
    } else if (e.keyCode === 37) {
       moveEsquerda = true;
+      jogador.direcao = 3;
    }
 }
 
@@ -100,7 +107,10 @@ function passo(){
    if (jogador.x>=380) {
      jogador.x=380;
    } 
-   
+   jogador.quadro+=4*intervalo/1000;
+   if(jogador.quadro>4){
+      jogador.quadro = 0;
+   }
    if (jogador.x < inimigo.x) {
       inimigo.x=inimigo.x-10*nivel*intervalo/1000;   
    }
@@ -121,7 +131,6 @@ function passo(){
    ctx.fillRect(0, 0, 400, 300);
    
 
-
  
    //inimigo
    ctx.fillStyle="rgb(0,0,255)";
@@ -133,15 +142,18 @@ function passo(){
    ctx.fill();
    ctx.stroke();
 
-   //personagel do jogo
+   //personagem do jogo
    ctx.fillStyle="rgb(255,0,0)";
    ctx.strokeStyle="rgb(255,255,255)"; 
    ctx.lineWidth=2;
    ctx.beginPath( );
    ctx.rect(jogador.x-jogador.l/2,jogador.y-jogador.a/2,jogador.l,jogador.a);
    ctx.closePath( );
-   ctx.fill();
-   ctx.stroke();
+   //ctx.fill();
+   //ctx.stroke();
+   ctx.drawImage(personagemImagem, 35*(Math.floor(jogador.quadro)==3?1:Math.floor(jogador.quadro)), 52*(jogador.direcao), 35, 52,
+      jogador.x-jogador.l/2,jogador.y-jogador.a/2,jogador.l,jogador.a);
+   console.log(jogador.quadro);
 
 //Desenha porta
    ctx.fillStyle="rgb(155,100,50)";
@@ -154,7 +166,7 @@ function passo(){
    
 
 
-   console.log(colisao(jogador, porta));
+   //console.log(colisao(jogador, porta));
 
    if(colisao(jogador, porta)){
 
