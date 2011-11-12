@@ -11,12 +11,19 @@ var jogador = {
    direcao: 0,
    movendo: false
 };
-   var coluna;
+
+var coluna;
 var porta = {
    x: 370, a:35, y:270, l:25  
 };
+
 var inimigo = {
-   x: 370, a:25, y:170, l:25, vx: 60, vy: 60  
+   x: 370, y: 170,
+   a: 52, l: 35,
+   v: 30,  
+   quadro: 0,
+   direcao: 0,
+   movendo: false
 };
 
 
@@ -73,6 +80,7 @@ function passo(){
    agora = Date.now();
    intervalo = agora - depois;
 
+   //Movimento do Jogador
    if(jogador.movendo){
       switch(jogador.direcao){
          case 0:
@@ -104,24 +112,37 @@ function passo(){
      jogador.x=400-jogador.l/2;
    } 
    jogador.quadro+=4*intervalo/1000;
+   inimigo.quadro+=(4)*intervalo/1000;
    if(jogador.quadro>4){
       jogador.quadro = 0;
    }
-   if (jogador.x < inimigo.x) {
-      inimigo.x=inimigo.x-10*nivel*intervalo/1000;   
+   if(inimigo.quadro>4){
+      inimigo.quadro = 0;
+      inimigo.s = Math.floor(10*Math.random()%2);
    }
 
-   if (jogador.y < inimigo.y) {
-      inimigo.y=inimigo.y-10*nivel*intervalo/1000;   
+   //Movimento do Inimigo
+   dx = jogador.x - inimigo.x;
+   dy = jogador.y - inimigo.y;
+   inimigo.movendo = false;
+   if (dx>0 && inimigo.s) {
+      inimigo.movendo = true;
+      inimigo.direcao = 1;
+      inimigo.x=inimigo.x+Math.min(inimigo.v*nivel*intervalo/1000,dx);   
+   } else if (dx<0 && inimigo.s) {
+      inimigo.movendo = true;
+      inimigo.direcao = 3;
+      inimigo.x=inimigo.x+Math.max(-inimigo.v*nivel*intervalo/1000,dx);
+   } else if (dy < 0) {
+      inimigo.movendo = true;
+      inimigo.direcao = 0;
+      inimigo.y=inimigo.y+Math.max(-inimigo.v*nivel*intervalo/1000,dy);   
+   }else if (dy>0) {
+      inimigo.movendo = true;
+      inimigo.direcao = 2;
+      inimigo.y=inimigo.y+Math.min(inimigo.v*nivel*intervalo/1000, dy);   
    }
    
-   if (jogador.x > inimigo.x) {
-      inimigo.x=inimigo.x+10*nivel*intervalo/1000;   
-   }
-
-   if (jogador.y > inimigo.y) {
-      inimigo.y=inimigo.y+10*nivel*intervalo/1000;   
-   }
 
    ctx.fillStyle="rgb(0,0,0)";
    ctx.fillRect(0, 0, 400, 300);
@@ -130,12 +151,12 @@ function passo(){
  
    //inimigo
    ctx.fillStyle="rgb(0,0,255)";
-   ctx.strokeStyle="rgb(255,255,255)"; 
-   ctx.lineWidth=2;
+   ctx.strokeStyle="rgb(255,155,155)"; 
+   ctx.lineWidth=1;
    ctx.beginPath( );
    ctx.rect(inimigo.x-inimigo.l/2,inimigo.y-inimigo.a/2,inimigo.l,inimigo.a);
    ctx.closePath( );
-   ctx.fill();
+   //ctx.fill();
    ctx.stroke();
 
    //personagem do jogo
@@ -155,6 +176,14 @@ function passo(){
    }
    ctx.drawImage(personagemImagem, coluna, 52*(jogador.direcao), 35, 52,
       jogador.x-jogador.l/2,jogador.y-jogador.a/2,jogador.l,jogador.a);
+
+   if(inimigo.movendo){
+         coluna = 35*(Math.floor(inimigo.quadro)==3?1:Math.floor(inimigo.quadro));
+   }else{
+         coluna = 35;
+   }
+   ctx.drawImage(personagemImagem, coluna, 52*(inimigo.direcao), 35, 52,
+      inimigo.x-inimigo.l/2,inimigo.y-inimigo.a/2,inimigo.l,inimigo.a);
 
 //Desenha porta
    ctx.fillStyle="rgb(155,100,50)";
