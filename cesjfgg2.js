@@ -34,6 +34,7 @@ var depois = agora;
 var intervalo = 0;
 var nivel = 1;
 var vidas = 5;
+var recorde = 1;
 
 var personagemImagem = new Image();
 personagemImagem.src = "personagem.png";
@@ -154,7 +155,7 @@ function passo(){
  
    //inimigo
    ctx.fillStyle="rgb(0,0,255)";
-   ctx.strokeStyle="rgb(255,155,155)"; 
+   ctx.strokeStyle="rgb(255,0,0)"; 
    ctx.lineWidth=1;
    ctx.beginPath( );
    ctx.rect(inimigo.x-inimigo.l/2,inimigo.y-inimigo.a/2,inimigo.l,inimigo.a);
@@ -197,17 +198,20 @@ function passo(){
    ctx.fill();
    ctx.stroke();
    
-
-
-   //console.log(colisao(jogador, porta));
-
    if(colisao(jogador, porta)){
       nivel+=1;
+      recorde = (nivel>recorde)?nivel:recorde;
       jogador.x = jogador.l/2;
       jogador.y = jogador.a/2;
+      inimigo.x = 100+(300/2)*(Math.random());
+      inimigo.y = 100+(200/2)*(Math.random());
    }
    if(colisao(jogador, inimigo)){
       vidas-=1;
+      if(vidas==0){
+         vidas = 5;
+         nivel = 1;
+      }
       jogador.x = jogador.l/2;
       jogador.y = jogador.a/2;
       inimigo.x = 100+(300/2)*(Math.random());
@@ -219,8 +223,12 @@ function passo(){
    ctx.lineWidth = 1.0;
    ctx.fillText("Nível: "+nivel,350,15);
    ctx.strokeText("Nível: "+nivel,350,15);
+   ctx.strokeStyle="rgb(255,0,0)";
    ctx.fillText("Vidas: "+vidas,300,15);
-   ctx.strokeText("Vidas: "+vidas,300,15);
+   ctx.strokeText("Vidas: "+vidas, 300,15);
+   ctx.strokeStyle="rgb(255,255,0)";
+   ctx.fillText("Recorde: "+recorde, 240,15);
+   ctx.strokeText("Recorde: "+recorde, 240,15);
 
    depois = agora;
 }
