@@ -20,7 +20,7 @@ var porta = {
 var inimigo = {
    x: 370, y: 170,
    a: 52, l: 35,
-   v: 30,  
+   v: 15,  
    quadro: 0,
    direcao: 0,
    movendo: false
@@ -33,6 +33,7 @@ var agora = Date.now();
 var depois = agora;
 var intervalo = 0;
 var nivel = 1;
+var vidas = 5;
 
 var personagemImagem = new Image();
 personagemImagem.src = "personagem.png";
@@ -199,18 +200,25 @@ function passo(){
    //console.log(colisao(jogador, porta));
 
    if(colisao(jogador, porta)){
-
       nivel+=1;
       jogador.x = jogador.l/2;
       jogador.y = jogador.a/2;
-
-
    }
+   if(colisao(jogador, inimigo)){
+      vidas-=1;
+      jogador.x = jogador.l/2;
+      jogador.y = jogador.a/2;
+      inimigo.x = 100+(300/2)*(Math.random());
+      inimigo.y = 100+(200/2)*(Math.random());
+   }
+
    ctx.fillStyle="rgb(255,255,0)";
    ctx.strokeStyle="rgb(255,255,255)";
    ctx.lineWidth = 1.0;
    ctx.fillText("Nível: "+nivel,350,15);
    ctx.strokeText("Nível: "+nivel,350,15);
+   ctx.fillText("Vidas: "+vidas,300,15);
+   ctx.strokeText("Vidas: "+vidas,300,15);
 
    depois = agora;
 }
