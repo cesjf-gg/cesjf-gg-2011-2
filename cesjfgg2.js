@@ -3,14 +3,14 @@ var ctx = tela.getContext("2d");
 
 ctx.fillRect(0, 0, 400, 300);
 
-var jogador = {};
+var jogador = {
+   x: 370,  y:170, a:25, l:25, vx: 60, vy: 60  
+};
 var porta = {
-  
    x: 370, a:35, y:270, l:25  
 };
 var inimigo = {
-  
-   x: 370, a:25, y:170, l:25  
+   x: 370, a:25, y:170, l:25, vx: 60, vy: 60  
 };
 
 
