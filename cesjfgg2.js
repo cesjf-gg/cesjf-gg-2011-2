@@ -90,19 +90,18 @@ function passo(){
       }
    }
    
-   if(jogador.y>=280){
-      jogador.y=280;
-
+   if(jogador.y+jogador.a/2>=300){
+      jogador.y=300-jogador.a/2;
    }
 
-   if(jogador.y<=0){
-      jogador.y=0;
+   if(jogador.y-jogador.a/2<=0){
+      jogador.y=jogador.a/2;
    }
-   if (jogador.x<=0) {
-     jogador.x =0;
+   if (jogador.x-jogador.l/2<=0) {
+     jogador.x = jogador.l/2;
    }
-   if (jogador.x>=380) {
-     jogador.x=380;
+   if (jogador.x+jogador.l/2>=400) {
+     jogador.x=400-jogador.l/2;
    } 
    jogador.quadro+=4*intervalo/1000;
    if(jogador.quadro>4){
