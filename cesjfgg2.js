@@ -4,8 +4,14 @@ var ctx = tela.getContext("2d");
 ctx.fillRect(0, 0, 400, 300);
 
 var jogador = {
-   x: 370,  y:170, a:25, l:25, vx: 60, vy: 60  
+   x: 10,   y: 10,
+   l: 35,   a: 52,
+   v: 100,
+   quadro: 0,
+   direcao: 0,
+   movendo: false
 };
+   var coluna;
 var porta = {
    x: 370, a:35, y:270, l:25  
 };
@@ -15,19 +21,10 @@ var inimigo = {
 
 
 
-jogador.y = 10;
-jogador.x = 10;
-jogador.a = 48;
-jogador.l = 35;
-jogador.quadro = 0;
-jogador.direcao = 0;
+
 var agora = Date.now();
 var depois = agora;
 var intervalo = 0;
-var moveBaixo = false;
-var moveCima = false;
-var moveDireita = false;
-var moveEsquerda = false;
 var nivel = 1;
 
 var personagemImagem = new Image();
@@ -41,58 +38,58 @@ addEventListener("keyup", botaoSolto);
 
 
 function botaoPressionado(e){
-   //console.log("botao pressionado: " + e.keyCode);
    if (e.keyCode === 40) {
-      moveBaixo = true;
+      jogador.movendo = true;
       jogador.direcao = 2;
    } else if (e.keyCode === 38) {
-      moveCima = true;
+      jogador.movendo = true;
       jogador.direcao = 0;
    } 
    
    if (e.keyCode === 39) {
-      moveDireita = true;
+      jogador.movendo = true;
       jogador.direcao = 1;
    } else if (e.keyCode === 37) {
-      moveEsquerda = true;
+      jogador.movendo = true;
       jogador.direcao = 3;
    }
 }
 
 function botaoSolto(e){
-   //console.log("botao solto: " + e.keyCode);
-   if (e.keyCode === 40) {
-      moveBaixo = false;
-   } else if (e.keyCode === 38) {
-      moveCima = false;
+   if (e.keyCode === 40 && jogador.direcao === 2) {
+      jogador.movendo = false;
+   } else if (e.keyCode === 38 && jogador.direcao === 0) {
+      jogador.movendo = false;
    } 
 
-   if (e.keyCode == 39) {
-      moveDireita = false;
-   } else if (e.keyCode == 37) {
-      moveEsquerda = false;
+   if (e.keyCode == 39 && jogador.direcao === 1) {
+      jogador.movendo = false;
+   } else if (e.keyCode == 37 && jogador.direcao === 3) {
+      jogador.movendo = false;
    }
 }
 
 function passo(){
    agora = Date.now();
    intervalo = agora - depois;
-   //console.log(intervalo);
-   if(moveBaixo){
-      jogador.y=jogador.y+60*intervalo/1000;
-   }
-   
-   if (moveCima) {
-      jogador.y=jogador.y-60*intervalo/1000; 
-   }
-   
-   if (moveDireita) {
-      jogador.x=jogador.x+60*intervalo/1000;         
-   }
 
-   if (moveEsquerda) {
-     jogador.x=jogador.x-60*intervalo/1000;      
+   if(jogador.movendo){
+      switch(jogador.direcao){
+         case 0:
+            jogador.y=jogador.y-jogador.v*intervalo/1000; 
+         break;
+         case 1:
+            jogador.x=jogador.x+jogador.v*intervalo/1000;         
+         break;
+         case 2:
+            jogador.y=jogador.y+jogador.v*intervalo/1000;
+         break;
+         case 3:
+           jogador.x=jogador.x-jogador.v*intervalo/1000;      
+         break;
+      }
    }
+   
    if(jogador.y>=280){
       jogador.y=280;
 
@@ -145,15 +142,20 @@ function passo(){
    //personagem do jogo
    ctx.fillStyle="rgb(255,0,0)";
    ctx.strokeStyle="rgb(255,255,255)"; 
-   ctx.lineWidth=2;
+   ctx.lineWidth=1;
    ctx.beginPath( );
    ctx.rect(jogador.x-jogador.l/2,jogador.y-jogador.a/2,jogador.l,jogador.a);
    ctx.closePath( );
    //ctx.fill();
-   //ctx.stroke();
-   ctx.drawImage(personagemImagem, 35*(Math.floor(jogador.quadro)==3?1:Math.floor(jogador.quadro)), 52*(jogador.direcao), 35, 52,
+   ctx.stroke();
+
+   if(jogador.movendo){
+         coluna = 35*(Math.floor(jogador.quadro)==3?1:Math.floor(jogador.quadro));
+   }else{
+         coluna = 35;
+   }
+   ctx.drawImage(personagemImagem, coluna, 52*(jogador.direcao), 35, 52,
       jogador.x-jogador.l/2,jogador.y-jogador.a/2,jogador.l,jogador.a);
-   console.log(jogador.quadro);
 
 //Desenha porta
    ctx.fillStyle="rgb(155,100,50)";
