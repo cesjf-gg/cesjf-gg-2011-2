@@ -37,6 +37,8 @@ var vidas = 5;
 
 var personagemImagem = new Image();
 personagemImagem.src = "personagem.png";
+var inimigoImagem = new Image();
+inimigoImagem.src = "inimigo.png";
 
 setInterval(passo,50);
 
@@ -183,7 +185,7 @@ function passo(){
    }else{
          coluna = 35;
    }
-   ctx.drawImage(personagemImagem, coluna, 52*(inimigo.direcao), 35, 52,
+   ctx.drawImage(inimigoImagem, coluna, 52*(inimigo.direcao), 35, 52,
       inimigo.x-inimigo.l/2,inimigo.y-inimigo.a/2,inimigo.l,inimigo.a);
 
 //Desenha porta
