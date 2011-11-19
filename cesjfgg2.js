@@ -3,6 +3,11 @@ var ctx = tela.getContext("2d");
 
 ctx.fillRect(0, 0, 400, 300);
 
+var sombra = {
+    x: 10, y: 10,
+	l: 35, a: 52
+}
+
 var jogador = {
    x: 10,   y: 10,
    l: 35,   a: 52,
@@ -24,6 +29,10 @@ var inimigo = {
    quadro: 0,
    direcao: 0,
    movendo: false
+};
+
+var parede = {
+   x: 200, a:35, y:100, l:25  
 };
 
 
@@ -86,22 +95,38 @@ function passo(){
 
    //Movimento do Jogador
    if(jogador.movendo){
+      sombra.x = jogador.x;
+	  sombra.y = jogador.y;
       switch(jogador.direcao){
          case 0:
+			sombra.y=jogador.y-jogador.v*intervalo/1000; 
+			if (!colisao(sombra, parede)) {
             jogador.y=jogador.y-jogador.v*intervalo/1000; 
+			}
          break;
          case 1:
-            jogador.x=jogador.x+jogador.v*intervalo/1000;         
+		    sombra.x=jogador.x+jogador.v*intervalo/1000;
+			if (!colisao(sombra, parede)) {
+            jogador.x=jogador.x+jogador.v*intervalo/1000;
+			}
+         
          break;
          case 2:
+			sombra.y=jogador.y+jogador.v*intervalo/1000;
+			if (!colisao(sombra, parede)) {
             jogador.y=jogador.y+jogador.v*intervalo/1000;
+			}
          break;
          case 3:
-           jogador.x=jogador.x-jogador.v*intervalo/1000;      
+		   sombra.x=jogador.x-jogador.v*intervalo/1000; 
+		   if (!colisao(sombra, parede)) {
+           jogador.x=jogador.x-jogador.v*intervalo/1000; 
+	     	}		   
          break;
       }
    }
-   
+    
+    //li
    if(jogador.y+jogador.a/2>=300){
       jogador.y=300-jogador.a/2;
    }
@@ -115,6 +140,7 @@ function passo(){
    if (jogador.x+jogador.l/2>=400) {
      jogador.x=400-jogador.l/2;
    } 
+   
    jogador.quadro+=4*intervalo/1000;
    inimigo.quadro+=(4)*intervalo/1000;
    if(jogador.quadro>4){
@@ -128,23 +154,42 @@ function passo(){
    //Movimento do Inimigo
    dx = jogador.x - inimigo.x;
    dy = jogador.y - inimigo.y;
+   
+   sombra.x = inimigo.x;
+   sombra.y = inimigo.y;
    inimigo.movendo = false;
    if (dx>0 && inimigo.s) {
       inimigo.movendo = true;
       inimigo.direcao = 1;
-      inimigo.x=inimigo.x+Math.min(inimigo.v*nivel*intervalo/1000,dx);   
+	  
+	  sombra.x=inimigo.x+Math.min(inimigo.v*nivel*intervalo/1000,dx);
+	  if (!colisao(sombra, parede)) {
+      inimigo.x=inimigo.x+Math.min(inimigo.v*nivel*intervalo/1000,dx);  
+	  }	  
+	  
    } else if (dx<0 && inimigo.s) {
       inimigo.movendo = true;
       inimigo.direcao = 3;
+	  
+	  sombra.x=inimigo.x+Math.max(-inimigo.v*nivel*intervalo/1000,dx);
+	  if (!colisao(sombra, parede)) {
       inimigo.x=inimigo.x+Math.max(-inimigo.v*nivel*intervalo/1000,dx);
+	  }
    } else if (dy < 0) {
       inimigo.movendo = true;
       inimigo.direcao = 0;
-      inimigo.y=inimigo.y+Math.max(-inimigo.v*nivel*intervalo/1000,dy);   
+	   sombra.y=inimigo.y+Math.max(-inimigo.v*nivel*intervalo/1000,dy); 
+	   if (!colisao(sombra, parede)) {
+       inimigo.y=inimigo.y+Math.max(-inimigo.v*nivel*intervalo/1000,dy); 
+	   }	  
    }else if (dy>0) {
       inimigo.movendo = true;
       inimigo.direcao = 2;
+	  
+	  sombra.y=inimigo.y+Math.min(inimigo.v*nivel*intervalo/1000, dy); 
+	  if (!colisao(sombra, parede)) {
       inimigo.y=inimigo.y+Math.min(inimigo.v*nivel*intervalo/1000, dy);   
+	  }
    }
    
 
@@ -197,6 +242,15 @@ function passo(){
    ctx.closePath( );
    ctx.fill();
    ctx.stroke();
+   
+//Desenha parede
+   ctx.fillStyle="rgb(200,200,200)";
+   ctx.strokeStyle="rgb(100,100,100)";
+   ctx.beginPath( );
+   ctx.rect(parede.x-parede.l/2,parede.y-parede.a/2,parede.l,parede.a);
+   ctx.closePath( );
+   ctx.fill();
+   ctx.stroke();   
    
    if(colisao(jogador, porta)){
       nivel+=1;
