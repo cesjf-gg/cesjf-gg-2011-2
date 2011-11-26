@@ -1,8 +1,11 @@
 var tela = document.getElementById("canvas");
 var ctx = tela.getContext("2d");
-
+var chaves = 0;
 ctx.fillRect(0, 0, 400, 300);
-
+var chaves1 = {
+   x: 10, y: 200,
+	l: 20, a: 20
+}
 var sombra = {
     x: 10, y: 10,
 	l: 35, a: 52
@@ -19,7 +22,7 @@ var jogador = {
 
 var coluna;
 var porta = {
-   x: 370, a:35, y:270, l:25  
+   x: 370, a:35, y:270, l:25   
 };
 
 var inimigo = {
@@ -35,7 +38,12 @@ var parede = {
    x: 200, a:35, y:100, l:25  
 };
 
-
+var paredes = [
+{x: 200, a:100, y:100, l:25},
+{x: 100, a:25, y:200, l:100},
+{x: 300, a:100, y:100, l:25},
+{x: 150, a:105, y:100, l:25},
+];
 
 
 var agora = Date.now();
@@ -92,40 +100,58 @@ function botaoSolto(e){
 function passo(){
    agora = Date.now();
    intervalo = agora - depois;
-
+      var colidiu=false;
    //Movimento do Jogador
    if(jogador.movendo){
       sombra.x = jogador.x;
-	  sombra.y = jogador.y;
+	   sombra.y = jogador.y;
+
       switch(jogador.direcao){
          case 0:
+  
 			sombra.y=jogador.y-jogador.v*intervalo/1000; 
-			if (!colisao(sombra, parede)) {
+         for(var i=0; i<paredes.length; i++){
+             if (colisao(sombra, paredes[i]))
+                colidiu=true; 
+         }
+			if (!colidiu) {
             jogador.y=jogador.y-jogador.v*intervalo/1000; 
 			}
          break;
          case 1:
 		    sombra.x=jogador.x+jogador.v*intervalo/1000;
-			if (!colisao(sombra, parede)) {
+         for(var i=0; i<paredes.length; i++){
+             if (colisao(sombra, paredes[i]))
+                colidiu=true; 
+         }
+			if (!colidiu) {
             jogador.x=jogador.x+jogador.v*intervalo/1000;
 			}
          
          break;
          case 2:
 			sombra.y=jogador.y+jogador.v*intervalo/1000;
-			if (!colisao(sombra, parede)) {
+         for(var i=0; i<paredes.length; i++){
+             if (colisao(sombra, paredes[i]))
+                colidiu=true; 
+         }
+			if (!colidiu) {
             jogador.y=jogador.y+jogador.v*intervalo/1000;
 			}
          break;
          case 3:
 		   sombra.x=jogador.x-jogador.v*intervalo/1000; 
-		   if (!colisao(sombra, parede)) {
+         for(var i=0; i<paredes.length; i++){
+             if (colisao(sombra, paredes[i]))
+                colidiu=true; 
+         }
+		   if (!colidiu) {
            jogador.x=jogador.x-jogador.v*intervalo/1000; 
 	     	}		   
          break;
       }
    }
-    
+   colidiu=false; 
     //li
    if(jogador.y+jogador.a/2>=300){
       jogador.y=300-jogador.a/2;
@@ -235,7 +261,11 @@ function passo(){
       inimigo.x-inimigo.l/2,inimigo.y-inimigo.a/2,inimigo.l,inimigo.a);
 
 //Desenha porta
+   if(chaves>=3){   
+   ctx.fillStyle="rgb(0,0,0)";
+}   else{
    ctx.fillStyle="rgb(155,100,50)";
+}
    ctx.strokeStyle="rgb(205,150,100)";
    ctx.beginPath( );
    ctx.rect(porta.x-porta.l/2,porta.y-porta.a/2,porta.l,porta.a);
@@ -244,22 +274,49 @@ function passo(){
    ctx.stroke();
    
 //Desenha parede
+   for(var i=0; i<paredes.length; i++){
    ctx.fillStyle="rgb(200,200,200)";
    ctx.strokeStyle="rgb(100,100,100)";
    ctx.beginPath( );
-   ctx.rect(parede.x-parede.l/2,parede.y-parede.a/2,parede.l,parede.a);
+   ctx.rect(paredes[i].x-paredes[i].l/2,paredes[i].y-paredes[i].a/2,paredes[i].l,paredes[i].a);
    ctx.closePath( );
    ctx.fill();
-   ctx.stroke();   
+   ctx.stroke();  
+}
+//Desenha chaves 
+   ctx.fillStyle="rgb(200,200,100)";
+   ctx.strokeStyle="rgb(255,255,100)";
+   ctx.beginPath( );
+   ctx.rect(chaves1.x-chaves1.l/2,chaves1.y-             chaves1.a/2,chaves1.l,chaves1.a);
+   ctx.closePath( );
+   ctx.fill();
+   ctx.stroke();  
    
-   if(colisao(jogador, porta)){
+   if(colisao(jogador, porta) && chaves>=3){
       nivel+=1;
+      chaves = 0;
       recorde = (nivel>recorde)?nivel:recorde;
       jogador.x = jogador.l/2;
       jogador.y = jogador.a/2;
       inimigo.x = 100+(300/2)*(Math.random());
       inimigo.y = 100+(200/2)*(Math.random());
+      chaves1.x = 20+(300/2)*(Math.random());
+      chaves1.y = 20+(200/2)*(Math.random());
    }
+
+   if(colisao(jogador, chaves1)){
+      chaves+=1;
+        if(chaves >=3){
+      chaves1.x = -100;
+      chaves1.y = -100;
+         
+      }else{
+      chaves1.x = 20+(300/2)*(Math.random());
+      chaves1.y = 20+(200/2)*(Math.random());
+      }
+      
+   }
+
    if(colisao(jogador, inimigo)){
       vidas-=1;
       if(vidas==0){
