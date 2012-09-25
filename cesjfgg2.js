@@ -3,8 +3,9 @@ var ctx = tela.getContext("2d");
 var chaves = 0;
 ctx.fillRect(0, 0, 400, 300);
 var chaves1 = {
-   x: 10, y: 200,
-	l: 20, a: 20
+	l: 20, a: 20,
+   x: 20+(300/3)*Math.floor((4*Math.random())),
+   y: 20+(200/2)*Math.floor(3*Math.random())
 }
 var sombra = {
     x: 10, y: 10,
@@ -39,10 +40,14 @@ var parede = {
 };
 
 var paredes = [
-{x: 200, a:100, y:100, l:25},
-{x: 100, a:25, y:200, l:100},
-{x: 300, a:100, y:100, l:25},
-{x: 150, a:105, y:100, l:25},
+{x: 100, a:100, y:120, l:25},
+{x: 200, a:100, y:50, l:25},
+{x: 250, a:100, y:250, l:25},
+{x: 300, a:100, y:120, l:25},
+{x: 80, a:25,  y:185, l:60},
+{x: 278, a:25,  y:185, l:80},
+//{x: 300, a:100, y:100, l:25},
+//{x: 150, a:105, y:100, l:25},
 ];
 
 
@@ -184,12 +189,18 @@ function passo(){
    sombra.x = inimigo.x;
    sombra.y = inimigo.y;
    inimigo.movendo = false;
+   colidiu = false;
    if (dx>0 && inimigo.s) {
       inimigo.movendo = true;
       inimigo.direcao = 1;
 	  
 	  sombra.x=inimigo.x+Math.min(inimigo.v*nivel*intervalo/1000,dx);
-	  if (!colisao(sombra, parede)) {
+     for(i=0; i<paredes.length; i++){
+      if(colisao(sombra, paredes[i])){
+         colidiu=true;
+      }
+     }
+	  if (!colidiu) {
       inimigo.x=inimigo.x+Math.min(inimigo.v*nivel*intervalo/1000,dx);  
 	  }	  
 	  
@@ -198,14 +209,24 @@ function passo(){
       inimigo.direcao = 3;
 	  
 	  sombra.x=inimigo.x+Math.max(-inimigo.v*nivel*intervalo/1000,dx);
-	  if (!colisao(sombra, parede)) {
+     for(i=0; i<paredes.length; i++){
+      if(colisao(sombra, paredes[i])){
+         colidiu=true;
+      }
+     }
+	  if (!colidiu) {
       inimigo.x=inimigo.x+Math.max(-inimigo.v*nivel*intervalo/1000,dx);
 	  }
    } else if (dy < 0) {
       inimigo.movendo = true;
       inimigo.direcao = 0;
 	   sombra.y=inimigo.y+Math.max(-inimigo.v*nivel*intervalo/1000,dy); 
-	   if (!colisao(sombra, parede)) {
+     for(i=0; i<paredes.length; i++){
+      if(colisao(sombra, paredes[i])){
+         colidiu=true;
+      }
+     }
+	  if (!colidiu) {
        inimigo.y=inimigo.y+Math.max(-inimigo.v*nivel*intervalo/1000,dy); 
 	   }	  
    }else if (dy>0) {
@@ -213,7 +234,12 @@ function passo(){
       inimigo.direcao = 2;
 	  
 	  sombra.y=inimigo.y+Math.min(inimigo.v*nivel*intervalo/1000, dy); 
-	  if (!colisao(sombra, parede)) {
+     for(i=0; i<paredes.length; i++){
+      if(colisao(sombra, paredes[i])){
+         colidiu=true;
+      }
+     }
+	  if (!colidiu) {
       inimigo.y=inimigo.y+Math.min(inimigo.v*nivel*intervalo/1000, dy);   
 	  }
    }
@@ -300,8 +326,8 @@ function passo(){
       jogador.y = jogador.a/2;
       inimigo.x = 100+(300/2)*(Math.random());
       inimigo.y = 100+(200/2)*(Math.random());
-      chaves1.x = 20+(300/2)*(Math.random());
-      chaves1.y = 20+(200/2)*(Math.random());
+      chaves1.x = 50+(300/3)*Math.floor((3*Math.random()));
+      chaves1.y = 50+(200/4)*Math.floor(2*Math.random());
    }
 
    if(colisao(jogador, chaves1)){
@@ -311,8 +337,8 @@ function passo(){
       chaves1.y = -100;
          
       }else{
-      chaves1.x = 20+(300/2)*(Math.random());
-      chaves1.y = 20+(200/2)*(Math.random());
+      chaves1.x = 50+(300/3)*Math.floor((3*Math.random()));
+      chaves1.y = 50+(200/4)*Math.floor(2*Math.random());
       }
       
    }
